@@ -1,0 +1,117 @@
+img[src$="images/1.jpg"],
+img[src$="images/2.jpg"],
+img[src$="images/3.jpg"],
+img[src$="images/4.jpg"],
+img[src$="images/8.jpg"],
+img[src$="images/9.jpg"],
+img[src$="images/10.jpg"]{
+    width: 100px;
+    height: 100px;
+}
+
+body{
+    width: 1080px;
+    margin: 0 auto;
+    margin-top: 60px;
+    background-color: azure;
+    padding: 0 20px 20px 20px;
+    text-align: center;
+    border: 5px solid azure;
+}
+
+.header1{
+    margin: 0 auto;
+    margin-top: 60px;
+    color: blue;
+    font-size: 70px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+p.home{
+    text-align: left;
+}
+.menu {
+    list-style-type: none;
+    margin-left: 0px;
+    background-color: black;
+    text-align: center;
+    font-size: 15px;
+    overflow: hidden;
+    margin-top: 30px;
+    padding: 0 auto;
+}
+
+li a{
+    float: left;
+    display: block;
+    padding:16px;
+    color: azure;
+    text-align: center;
+    text-decoration: none;
+}
+
+li a:hover{
+    color:grey;
+}
+
+ul.submenuC{
+    list-style-type: none;
+    display: none;
+    position: absolute;
+    background-color: black;
+    padding: 10px;
+    transform: translate(50px, 50px)
+}
+
+li.category:hover ul.submenuC{
+    display: block;
+}
+
+nav.shopping_list h2{
+    font-size: 20px;
+    text-align: right;
+}
+
+nav.shopping_list ul.shopping_list{
+    display: none;
+    position: absolute;
+    transform: translate(900px, -35px)
+}
+
+nav.shopping_list:hover ul.shopping_list{
+    list-style-type: none;
+    display: block;
+    background-color: white;
+    padding: 0 10px 10px 10px;
+    text-align: right;
+}
+
+ul.product_list{
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 10px;
+    list-style: none;
+    padding: 0;
+}
+ 
+ul.product_list li.newyear {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    font-size: 30px;
+}
+ul.product_list li.dragon {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    font-size: 30px;
+}
+li.newyear a{
+    color: black;
+}
+li.dragon a{
+    color: black;
+}
+
+
