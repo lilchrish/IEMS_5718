@@ -1,3 +1,10 @@
+img[src$="images/1.jpg"],
+img[src$="images/2.jpg"],
+img[src$="images/4.jpg"]{
+    width: 300px;
+    height: 300px;
+}
+
 body{
     width: 1080px;
     margin: 0 auto;
@@ -67,7 +74,7 @@ nav.shopping_list ul.shopping_list{
     transform: translate(900px, -35px)
 }
 
-h2:hover+ul.shopping_list{
+nav.shopping_list:hover ul.shopping_list{
     list-style-type: none;
     display: block;
     background-color: white;
@@ -75,16 +82,32 @@ h2:hover+ul.shopping_list{
     text-align: right;
 }
 
-img[src$="images/1.jpg"]{
-    width: 450px;
-    height: 450px;
-    float: left;
+ul.product_list{
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 10px;
+    list-style: none;
+    padding: 0;
+}
+ 
+ul.product_list li.newyear {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    font-size: 30px;
+}
+ul.product_list li.dragon {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    font-size: 30px;
+}
+li.newyear a{
+    color: black;
+}
+li.dragon a{
+    color: black;
 }
 
-#price{
-    font-size: 100px;
-}
 
-button.add{
-    font-size: 50px;
-}
