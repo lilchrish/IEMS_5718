@@ -2,9 +2,8 @@ img[src$="images/1.jpg"],
 img[src$="images/2.jpg"],
 img[src$="images/3.jpg"],
 img[src$="images/4.jpg"],
-img[src$="images/8.jpg"],
-img[src$="images/9.jpg"],
-img[src$="images/10.jpg"]{
+img[src$="images/5.jpg"],
+img[src$="images/6.jpg"]{
     width: 100px;
     height: 100px;
 }
@@ -67,6 +66,7 @@ li.category:hover ul.submenuC{
     display: block;
 }
 
+
 nav.shopping_list h2{
     font-size: 20px;
     text-align: right;
@@ -95,22 +95,22 @@ ul.product_list{
     padding: 0;
 }
  
-ul.product_list li.newyear {
+ul.product_list li.NY {
     padding: 10px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     font-size: 30px;
 }
-ul.product_list li.dragon {
+ul.product_list li.DG {
     padding: 10px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     font-size: 30px;
 }
-li.newyear a{
+li.NY a{
     color: black;
 }
-li.dragon a{
+li.DG a{
     color: black;
 }
 

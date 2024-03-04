@@ -75,9 +75,9 @@ h2:hover+ul.shopping_list{
     text-align: right;
 }
 
-img[src$="images/8.jpg"]{
-    width: 450px;
-    height: 450px;
+img[src$="images/4.jpg"]{
+    width: 500px;
+    height: 500px;
     float: left;
 }
 

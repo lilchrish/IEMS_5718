@@ -28,6 +28,37 @@ function iems5718_cat_fetchall() {
     return $q;
 }
 
+function iems5718_cat_fetchByName($name) {
+    // DB manipulation
+    global $db;
+    $db = iems5718_DB();
+    $sql = "SELECT * FROM category where name = '$name';";
+    $q = $db -> query($sql);
+    $result = '';
+    foreach ($q as $v){
+     $result .= $v['catid'];
+    }
+    return $result;
+}
+
+function iems5718_prod_fetchByCatid($cid) {
+    // DB manipulation
+    global $db;
+    $db = iems5718_DB();
+    $sql = "SELECT * FROM product WHERE catid = '$cid';";
+    $q = $db -> query($sql);
+    return $q;
+}
+
+function iems5718_prod_fetchByNameID($namee, $cid){
+    // DB manipulation
+    global $db;
+    $db = iems5718_DB();
+    $sql = "SELECT * FROM product WHERE catid = '$cid' AND name = '$namee';";
+    $q = $db -> query($sql);
+    return $q; 
+}
+
 // Since this form will take file upload, we use the tranditional (simpler) rather than AJAX form submission.
 // Therefore, after handling the request (DB insert and file copy), this function then redirects back to admin.html
 function iems5718_prod_insert() {
@@ -45,7 +76,7 @@ function iems5718_prod_insert() {
         throw new Exception("invalid-name");
     if (!preg_match('/^[\d\.]+$/', $_POST['price']))
         throw new Exception("invalid-price");
-    if (!preg_match('/^[\w\-]+$/', $_POST['description']))
+    if (!preg_match('/[\w\s\p{P}]+/', $_POST['description']))
        throw new Exception("invalid-text");
 
     //$sql="INSERT INTO product (catid, name, price, description) VALUES (?, ?, ?, ?)";
@@ -172,7 +203,7 @@ function iems5718_prod_fetchAll(){
         // DB manipulation
         global $db;
         $db = iems5718_DB();
-        $sql = "SELECT * FROM products LIMIT 100;";
+        $sql = "SELECT * FROM product LIMIT 100;";
         $db -> query($sql);
 }
 

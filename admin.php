@@ -1,9 +1,7 @@
 <?php
 require __DIR__.'/lib/db.inc.php';
-ini_set('display_errors', 1);
 $res = iems5718_cat_fetchall();
 $options = '';
-
 // Again, it is NOT SECURE. Why? and how to make it "secure"?
 
 foreach ($res as $value){
@@ -24,7 +22,7 @@ foreach ($res as $value){
             <label for="prod_price"> Price *</label>
             <div> <input id="prod_price" type="text" name="price" required="required" pattern="^\d+\.?\d*$"/></div>
             <label for="prod_desc"> Description *</label>
-            <div> <textarea id = "prod_desc" name="description" rows="7" cols="30" required="required" pattern="#^[\w\-]+$"> </textarea> </div>
+            <div> <textarea id = "prod_desc" name="description" rows="7" cols="30" required="required" pattern="/[\w\s\p{P}]+/"> </textarea> </div>
             <label for="prod_image"> Image * </label>
             <div> <input type="file" name="file" required="true" accept="image/jpeg"/> </div>
             <input type="submit" value="Submit"/>
