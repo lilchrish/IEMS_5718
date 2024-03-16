@@ -13,7 +13,7 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
         <link href="css/ShellieMay_DG.css" rel="stylesheet" type="text/css">
     </head>
     <body>
-
+	<script src="shopping_cart.js"></script>
         <header class="header1"> Buy The Best </header>
 
         <div id="menu">
@@ -46,20 +46,14 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
             </nav>
         </div>
         
-        <Nav class="shopping_list">
-            <h2 class="ds"> Shopping List </h2>
-            <ul class="shopping_list">
-                <li> Olu Mel-NY <input type = "number" min="0"> </li>
-                <li> Linabell-NY <input type = "number" min="0"> </li>
-                <li> ShellieMay-NY <input type = "number" min="0"> </li>
-                <li> Olu Mel-DG <input type = "number" min="0"> </li>
-                <li> Linabell-DG <input type = "number" min="0"> </li>
-                <li> ShellieMay-DG <input type = "number" min="0"> </li>
-                <button> Check out </button>
-            </ul>
-        </Nav>
-
-        <div class="product">
+	<nav id='cart'>
+                <h3>Total: $<span id="total_amount">0</span></h3>
+                <div id="shopping_cart">
+                        <ul id="items"></ul>
+                </div>
+        </nav>
+	
+	<div class="product">
             <?php
                 $id = iems5718_cat_fetchByName('DG');
                 $sm = iems5718_prod_fetchByNameID('Shelliemay',$id);
@@ -67,7 +61,7 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
                     echo '<img src="images/' . $smn['pid'] . '.jpg" alt="ShellieMay New Year Edition"/>';
                     echo '<p id="description"> Description:' . $smn['description'] . '</p>';
                     echo '<p id="price"> $' . $smn['price'] . ' </p>';
-                    echo '<button class="add"> add</button>';
+                    echo '<button class="add" onclick="addtocart('. $smn['pid']-1  .');"> add</button>';
             }
         ?>
     </div>

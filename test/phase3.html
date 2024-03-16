@@ -1,0 +1,50 @@
+<style>
+    #shopping_cart {
+      display: none;
+    }
+    
+    #cart:hover div {
+      display: block;
+    }
+    
+    .flex {
+      /* basic styling */
+      width: 350px;
+      height: 200px;
+      border: 1px solid #555;
+      font: 14px Arial;
+    
+      /* flexbox setup */
+      display: flex;
+      flex-direction: row;
+    }
+    
+    .flex>div {
+      flex: 1 1 auto;
+      width: 100px;
+    }
+    
+    </style>
+    
+    <script src="phase3.js"></script>
+
+    <nav id='cart'>
+    <h3>Total: $<span id="total_amount">0</span></h3>
+    <div id="shopping_cart">
+    <ul id="items">
+    </ul>
+    
+    </div>
+    </nav>
+    
+    <div class="flex">
+      <div>Apple price: $2 <button onclick="addtocart(0);">
+      Add to Cart
+      </button></div>
+      <div>Orange price: $2<button onclick="addtocart(1);">
+      Add to Cart
+      </button></div>
+      <div>Book price: $2<button onclick="addtocart(2);">
+      Add to Cart
+      </button></div>
+    </div>

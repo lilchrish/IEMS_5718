@@ -56,23 +56,12 @@ li.category:hover ul.submenuC{
     display: block;
 }
 
-nav.shopping_list h2{
-    font-size: 20px;
-    text-align: right;
+#shopping_cart{
+    display:none;
 }
 
-nav.shopping_list ul.shopping_list{
-    display: none;
-    position: absolute;
-    transform: translate(900px, -35px)
-}
-
-h2:hover+ul.shopping_list{
-    list-style-type: none;
+#cart:hover div{
     display: block;
-    background-color: white;
-    padding: 0 10px 10px 10px;
-    text-align: right;
 }
 
 img[src$="images/6.jpg"]{

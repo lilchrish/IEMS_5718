@@ -14,7 +14,7 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
         <link href="css/Linabell_NY.css" rel="stylesheet" type="text/css">
     </head>
     <body>
-
+	<script src="shopping_cart.js"></script>
         <header class="header1"> Buy The Best </header>
 
         <div id="menu">
@@ -47,20 +47,14 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
             </nav>
         </div>
 
-        <Nav class="shopping_list">
-            <h2 class="ds"> Shopping List </h2>
-            <ul class="shopping_list">
-                <li> Olu Mel-NY <input type = "number" min="0"> </li>
-                <li> Linabell-NY <input type = "number" min="0"> </li>
-                <li> ShellieMay-NY <input type = "number" min="0"> </li>
-                <li> Olu Mel-DG <input type = "number" min="0"> </li>
-                <li> Linabell-DG <input type = "number" min="0"> </li>
-                <li> ShellieMay-DG <input type = "number" min="0"> </li>
-                <button> Check out </button>
-            </ul>
-        </Nav>
-
-        <div class="product">
+	<nav id='cart'>
+                <h3>Total: $<span id="total_amount">0</span></h3>
+                <div id="shopping_cart">
+                        <ul id="items"></ul>
+                </div>
+        </nav>
+	
+	<div class="product">
             <?php
                 $id = iems5718_cat_fetchByName('NY');
                 $lb = iems5718_prod_fetchByNameID('Linabell',$id);
@@ -68,7 +62,7 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
                         echo '<img src="images/' . $lbb['pid'] . '.jpg" alt="Linabell Mel New Year Edition"/>';
                         echo '<p id="description"> Description:' . $lbb['description'] . '</p>';
                         echo '<p id="price"> $' . $lbb['price'] . ' </p>';
-                        echo '<button class="add"> add</button>';
+                        echo '<button class="add" onclick="addtocart('. $lbb['pid'] - 1 .');"> add</button>';
                 }
             ?>
         </div>

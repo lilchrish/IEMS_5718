@@ -7,7 +7,6 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
 ?>
 
 <!doctype html>
-
 <html>
     <head>
         <meta charset="utf-8" />
@@ -15,9 +14,8 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
         <link href="css/main_page_style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
-
         <header class="header1"> Buy The Best </header>
-	
+	<script src="shopping_cart.js"></script>	
         <div id="menu"> 
             <p class="home"> <a href="#">Home</a> </p>
             <nav>
@@ -47,23 +45,18 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
         </div>
 
         <div class="product">
-
-            <Nav class="shopping_list">
-                <h2 class="ds"> Shopping List </h2>
-                <ul class="shopping_list">
-                    <li> Olu Mel-NY <input type = "number" min="0"> </li>
-                    <li> Linabell-NY <input type = "number" min="0"> </li>
-                    <li> ShellieMay-NY <input type = "number" min="0"> </li>
-                    <li> Olu Mel-DG <input type = "number" min="0"> </li>
-                    <li> Linabell-DG <input type = "number" min="0"> </li>
-                    <li> ShellieMay-DG <input type = "number" min="0"> </li>
-                    <button> Check out </button>
-                </ul>
-            </Nav>
-	
+            
+            <nav id='cart'>
+      		<h3>Total: $<span id="total_amount">0</span></h3>
+      		<div id="shopping_cart">
+        		<ul id="items"></ul>
+      		</div>
+    	    </nav>
+            	
 	    <?php 
 		$result = '<ul class="product_list">';
 		$tmp = '';
+		$idd = 0;
 		foreach ($res as $value) {
 			$prod = iems5718_prod_fetchByCatid($value['catid']);
 			foreach($prod as $prodres){
@@ -71,7 +64,8 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
 				$tmp .= '<a href="' . $prodres['name'] . '_'. $value['name'] . '.php">';
 				$tmp .= '<img src = "images/' . $prodres['pid'] . '.jpg"/> '. $prodres['name'].'-' . $value['name'] . '</a>';
 				$tmp .= '<p> $' . $prodres['price'] . '</p>';
-				$tmp .= '<button> add </button> </li>';
+				$tmp .= '<button onclick="addtocart('. $idd .');"> add </button> </li>';
+				$idd = $idd + 1;
 				$result .= $tmp;
 			}
 		}		

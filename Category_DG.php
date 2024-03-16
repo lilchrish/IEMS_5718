@@ -14,7 +14,7 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
         <link href="css/category_DG_style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
-
+	<script src="shopping_cart.js"></script>
         <header class="header1"> Buy The Best </header>
 
         <div id="menu"> 
@@ -50,31 +50,26 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
 
         <div class="product">
 
-            <Nav class="shopping_list">
-                <h2 class="ds"> Shopping List </h2>
-                <ul class="shopping_list">
-                    <li> Olu Mel-NY <input type = "number" min="0"> </li>
-                    <li> Linabell-NY <input type = "number" min="0"> </li>
-                    <li> ShellieMay-NY <input type = "number" min="0"> </li>
-                    <li> Olu Mel-DG <input type = "number" min="0"> </li>
-                    <li> Linabell-DG <input type = "number" min="0"> </li>
-                    <li> ShellieMay-DG <input type = "number" min="0"> </li>
-                    <button> Check out </button>
-                </ul>
-            </Nav>
-
+	    <nav id='cart'>
+                <h3>Total: $<span id="total_amount">0</span></h3>
+                <div id="shopping_cart">
+                        <ul id="items"></ul>
+                </div>
+            </nav>
 
             <ul class="product_list">
                 <?php
                     $id = iems5718_cat_fetchByName('DG');
                     $prodres = iems5718_prod_fetchByCatid($id);
                     
-                    $result = '';
+		    $result = '';
+		    $idd = 0;
 		    foreach ($prodres as $value) {
                         $operations = '<li class = "DG">';
                         $operations .= '<a href="' . $value['name'] . '_'  .'DG.html "> <img src="images/' . $value['pid'] . '.jpg"/>'.$value['name'] .'-DG </a>';
                         $operations .= '<p> $' . $value['price'] . '</p>';
-                        $operations .= '<button> add </button> </li>';
+			$operations .= '<button onclick="addtocart('. $idd .');"> add </button> </li>';
+			$idd = $idd + 1;
                         $result .= $operations;
                     }
                     echo $result;
