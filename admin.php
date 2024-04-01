@@ -1,15 +1,53 @@
 <?php
 require __DIR__.'/lib/db.inc.php';
+require __DIR__.'/lib/csrf_nonce.php';
+
+$auth_email = '';
+$checkR = false;
+//auth token validation
+if (empty($_SESSION['auth']) && empty($_COOKIE['auth'])){
+        header("Location: login.php");
+}
+if (!empty($_SESSION['auth'])){
+	$auth_email .= $_SESSION['auth']['email'];
+	$checkR = true;
+}
+if (!empty($_COOKIE['auth'])){
+	if($t = json_decode($_COOKIE['auth'],true)){
+		if (time() > $t['exp']) return $checkR;
+		global $db;
+		$q = $db -> prepare('SELECT salt, password FROM users WHERE email = ?');
+		if($q -> execute(array($t['em'])) && ($r = $q -> get_result() -> fetch_assoc()) && $t['k'] == hash_hmac("sha256", $t['exp'].$r['password'],$r['salt'])){
+			$_SESSION['auth'] = $_COOKIE['auth'];
+			$auth_email = $t['email'];
+			$checkR = true;
+		}
+	}
+}
+if(!$checkR){
+	throw new Exception("Invalid authentication!");
+}
+
 $res = iems5718_cat_fetchall();
 $options = '';
 // Again, it is NOT SECURE. Why? and how to make it "secure"?
+
+
 
 foreach ($res as $value){
     $options .= '<option value="'.$value["catid"].'"> '.$value["name"].' </option>';
 }
 ?>
 
-
+<?php
+                if(isset($_SESSION['userid']) && isset($_SESSION['email'])){
+                        echo '<h5> Hello ' . $_SESSION['email'] .'!</h5>';
+                        echo '<a href=logout.php>Logout</a>';
+                }else{
+                        echo '<h5> Hello Guest!</h5>';
+                        echo '<a href=login.php>Login</a>';
+                }
+?>
 <html>
     <fieldset>
         <legend> New Product</legend>
@@ -25,8 +63,9 @@ foreach ($res as $value){
             <div> <textarea id = "prod_desc" name="description" rows="7" cols="30" required="required" pattern="/[\w\s\p{P}]+/"> </textarea> </div>
             <label for="prod_image"> Image * </label>
             <div> <input type="file" name="file" required="true" accept="image/jpeg"/> </div>
-            <input type="submit" value="Submit"/>
-        </form>
+	    <input type="submit" value="Submit"/>
+	    <input type="hidden" name="nonce" value="<?php echo generateNonce(33,'prod_insert',30); ?>"/>
+	</form>
     </fieldset>
 </html>
 
@@ -39,7 +78,8 @@ foreach ($res as $value){
             <div> <input id="prod_name" type="text" name="name" required="required" pattern="^[\w\-]+$"/></div>
             <label for="prod_price"> Price *</label>
             <div> <input id="prod_price" type="text" name="price" required="required" pattern="^[\w\-]+$"/></div>
-            <input type="submit" value="Submit"/>
+	    <input type="submit" value="Submit"/>
+	    <input type="hidden" name="nonce" value="<?php echo generateNonce(33,'prod_edit',30); ?>"/>
         </form>
     </fieldset>
 </html>
@@ -50,8 +90,9 @@ foreach ($res as $value){
         <form id="prod_delete_by_catid" method="POST" action="admin-process.php?action=prod_delete_by_catid"
         enctype="multipart/form-data">
             <label for="prod_catid"> Category *</label>
-            <div> <select id="prod_catid" name="catid"><?php echo $options; ?></select></div>
-            <input type="submit" value="Submit"/>
+	    <div> <select id="prod_catid" name="catid"><?php echo $options; ?></select></div>
+	    <input type="submit" value="Submit"/>
+	    <input type="hidden" name="nonce" value="<?php echo generateNonce(33,'prod_delete_by_catid',30); ?>"/>
         </form>
     </fieldset>
 </html>
@@ -63,7 +104,8 @@ foreach ($res as $value){
         enctype="multipart/form-data">
             <label for="cat_name"> Name </label>
             <div> <input id="cat_name" type="text" name="name" required="required" pattern="^[\w\-]+$"/></div>
-            <input type="submit" value="Submit"/>
+	    <input type="submit" value="Submit"/>
+	    <input type="hidden" name="nonce" value="<?php echo generateNonce(33,'cat_insert',30); ?>"/>
         </form>
     </fieldset>
 </html>
@@ -78,6 +120,7 @@ foreach ($res as $value){
             <label for="cat_name"> Name </label>
 	    <div> <input id="cat_name" type="text" name="name" required="required" pattern="^[\w\-]+$"/></div>
 	    <input type="submit" value="Submit"/>
+	    <input type="hidden" name="nonce" value="<?php echo generateNonce(33,'cat_edit',30); ?>"/>
         </form>
     </fieldset>
 </html>
@@ -88,9 +131,10 @@ foreach ($res as $value){
         <form id="cat_delete" method="POST" action="admin-process.php?action=cat_delete"
         enctype="multipart/form-data">
             <label for="cat_catid"> Category *</label>
-            <div> <select id="cat_catid" name="catid"><?php echo $options; ?></select></div>
+	    <div> <select id="cat_catid" name="catid"><?php echo $options; ?></select></div>
             <input type="submit" value="Submit"/>
-        </form>
+	    <input type="hidden" name="nonce" value="<?php echo $nonce = generateNonce(33, 'cat_delete', 30);?>"/>
+	</form>
     </fieldset>
 </html>
 

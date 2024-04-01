@@ -1,4 +1,5 @@
 <?php
+session_start();
 require __DIR__.'/lib/db.inc.php';
 $res = iems5718_cat_fetchall();
 $catoptions = '';
@@ -14,6 +15,15 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
         <link href="css/category_DG_style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
+	<?php
+                if(isset($_SESSION['userid']) && isset($_SESSION['email'])){
+                        echo '<h5> Hello ' . $_SESSION['email'] .'!</h5>';
+                        echo '<a href=logout.php>Logout</a>';
+                }else{
+                        echo '<h5> Hello Guest!</h5>';
+                        echo '<a href=login.php>Login</a>';
+                }
+        ?>
 	<script src="shopping_cart.js"></script>
         <header class="header1"> Buy The Best </header>
 
@@ -66,7 +76,7 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
 		    $idd = 0;
 		    foreach ($prodres as $value) {
                         $operations = '<li class = "DG">';
-                        $operations .= '<a href="' . $value['name'] . '_'  .'DG.html "> <img src="images/' . $value['pid'] . '.jpg"/>'.$value['name'] .'-DG </a>';
+                        $operations .= '<a href="' . $value['name'] . '_'  .'DG.php "> <img src="images/' . $value['pid'] . '.jpg"/>'.$value['name'] .'-DG </a>';
                         $operations .= '<p> $' . $value['price'] . '</p>';
 			$operations .= '<button onclick="addtocart('. $idd .');"> add </button> </li>';
 			$idd = $idd + 1;

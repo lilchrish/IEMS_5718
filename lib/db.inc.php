@@ -63,24 +63,23 @@ function iems5718_prod_fetchByNameID($namee, $cid){
 // Therefore, after handling the request (DB insert and file copy), this function then redirects back to admin.html
 function iems5718_prod_insert() {
     // input validation or sanitization
-
+    if ($_SERVER["REQUEST_METHOD"] == "POST"){
+    	if (!preg_match('/^\d*$/', $_POST['catid']))
+        	throw new Exception("invalid-catid");
+    	$_POST['catid'] = (int) $_POST['catid'];
+    	if (!preg_match('/^[\w\-]+$/', $_POST['name']))
+        	throw new Exception("invalid-name");
+    	if (!preg_match('/^[\d\.]+$/', $_POST['price']))
+        	throw new Exception("invalid-price");
+    	if (!preg_match('/[\w\s\p{P}]+/', $_POST['description']))
+       		throw new Exception("invalid-text");
+    }
     // DB manipulation
     global $db;
     $db = iems5718_DB();
 
     // TODO: complete the rest of the INSERT command
-    if (!preg_match('/^\d*$/', $_POST['catid']))
-        throw new Exception("invalid-catid");
-    $_POST['catid'] = (int) $_POST['catid'];
-    if (!preg_match('/^[\w\-]+$/', $_POST['name']))
-        throw new Exception("invalid-name");
-    if (!preg_match('/^[\d\.]+$/', $_POST['price']))
-        throw new Exception("invalid-price");
-    if (!preg_match('/[\w\s\p{P}]+/', $_POST['description']))
-       throw new Exception("invalid-text");
 
-    //$sql="INSERT INTO product (catid, name, price, description) VALUES (?, ?, ?, ?)";
-    //$q = $db -> query($sql);
 
     // Copy the uploaded file to a folder which can be publicly accessible at incl/img/[pid].jpg
     if ($_FILES["file"]["error"] == 0
@@ -93,8 +92,9 @@ function iems5718_prod_insert() {
         $name = $_POST["name"];
         $price = $_POST["price"];
         $desc = $_POST["description"];
-        $sql="INSERT INTO product (catid, name, price, description) VALUES ('$catid', '$name', '$price', '$desc');";
-        $db -> query($sql);
+        $sql="INSERT INTO product (catid, name, price, description) VALUES (?,?,?,?);";
+	$q = db -> prepare($sql);
+	$q -> execute(array($catid,$name,$price,$desc));
         $lastId = mysqli_insert_id($db);
         // Note: Take care of the permission of destination folder (hints: current user is apache)
                 // Check your /etc/apache2/site-enabled and apache2.conf for the "user"
@@ -115,86 +115,85 @@ function iems5718_prod_insert() {
 
 // TODO: add other functions here to make the whole application complete
 
-        function iems5718_cat_insert() {
-                // input validation or sanitization
-
-            // DB manipulation
-            global $db;
-            $db = iems5718_DB();
-
-            // TODO: complete the rest of the INSERT command
-            if (!preg_match('/^[\w\- ]+$/', $_POST['name']))
+function iems5718_cat_insert() {
+	// input validation or sanitization
+	if ($_SERVER["REQUEST_METHOD"] == "POST"){
+	    if (!preg_match('/^[\w\- ]+$/', $_POST['name']))
                 throw new Exception("invalid-name");
-
-                        $catid = NULL;
-                        $name = $_POST["name"];
-
-            $sql="INSERT INTO category (catid, name) VALUES ('$catid', '$name');";
-            $db -> query($sql);
-
-            header('Location: admin.php');
-            exit();
-        }
+	}	
+        // DB manipulation
+        global $db;
+	$db = iems5718_DB();
+	// TODO: complete the rest of the INSERT command
+        $catid = NULL;
+	$name = $_POST["name"];
+  	$sql="INSERT INTO category (catid, name) VALUES (?,?);";
+	$q = $db -> prepare($sql);
+	$q -> execute(array($catid,$name));
+	header('Location: admin.php');
+	exit();
+}
 
 function iems5718_cat_edit(){
         // input validation or sanitization
-
-        // DB manipulation
+	if ($_SERVER["REQUEST_METHOD"] == "POST"){
+		if (!preg_match('/^\d*$/', $_POST['catid']))
+                        throw new Exception("invalid-catid");
+        	$_POST['catid'] = (int) $_POST['catid'];
+       	 	if (!preg_match('/^[\w\- ]+$/', $_POST['name']))
+                        throw new Exception("invalid-name");
+	}	
+	// DB manipulation
         global $db;
         $db = iems5718_DB();
 
         // TODO: complete the rest of the INSERT command
-        if (!preg_match('/^\d*$/', $_POST['catid']))
-                        throw new Exception("invalid-catid");
-        $_POST['catid'] = (int) $_POST['catid'];
-        if (!preg_match('/^[\w\- ]+$/', $_POST['name']))
-                        throw new Exception("invalid-name");
-
         $catid = $_POST["catid"];
         $name = $_POST["name"];
 
-        $sql="UPDATE category SET name = '$name' WHERE catid = '$catid';";
-        $db -> query($sql);
-        header('Location: admin.php');
+        $sql="UPDATE category SET name = ? WHERE catid = ?;";
+	$q = $db -> prepare($sql);
+	$q -> execute(array($name, $catid));       
+	header('Location: admin.php');
         exit();
 }
 
 function iems5718_cat_delete(){
- // input validation or sanitization
-
+ 	// input validation or sanitization
+	if ($_SERVER["REQUEST_METHOD"] == "POST"){
+	        if (!preg_match('/^\d*$/', $_POST['catid']))
+                        throw new Exception("invalid-catid");
+        	$_POST['catid'] = (int) $_POST['catid'];
+	}
         // DB manipulation
         global $db;
         $db = iems5718_DB();
 
         // TODO: complete the rest of the INSERT command
-        if (!preg_match('/^\d*$/', $_POST['catid']))
-                        throw new Exception("invalid-catid");
-        $_POST['catid'] = (int) $_POST['catid'];
-
         $catid = $_POST["catid"];
-        $sql = "DELETE FROM category WHERE catid = '$catid';";
-        $db -> query($sql);
-
+        $sql = "DELETE FROM category WHERE catid = ?;";
+        $q = $db -> prepare($sql);
+	$q -> execute(array($catid));
         header('Location: admin.php');
         exit();
 }
 
 function iems5718_prod_delete_by_catid(){
         // input validation or sanitization
-
+	if ($_SERVER["REQUEST_METHOD"] == "POST"){
+		if (!preg_match('/^\d*$/', $_POST['catid']))
+                        throw new Exception("invalid-catid");
+        	$_POST['catid'] = (int) $_POST['catid'];
+	}
         // DB manipulation
         global $db;
         $db = iems5718_DB();
 
         // TODO: complete the rest of the INSERT command
-        if (!preg_match('/^\d*$/', $_POST['catid']))
-                        throw new Exception("invalid-catid");
-        $_POST['catid'] = (int) $_POST['catid'];
-
         $catid = $_POST["catid"];
-        $sql = "DELETE FROM product WHERE catid = '$catid';";
-        $db -> query($sql);
-
+        $sql = "DELETE FROM product WHERE catid = ?;";
+        $q = db -> prepare($sql);
+	$q -> execute(array($catid));
         header('Location: admin.php');
         exit();
 }
@@ -214,43 +213,46 @@ function iems5718_prod_fetchOne($input,$inputt){
     return $q;
 }
 function iems5718_prod_edit(){
+    // input validation or sanitization
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+    	if (!preg_match('/^[\w\- ]+$/', $_POST['name']))
+        	throw new Exception("invalid-catid");
+    	$_POST['name'] = (int) $_POST['name'];
+    	if (!preg_match('/^[\d\.]+$/', $_POST['price']))
+        	throw new Exception("invalid-price");
+    }
     // DB manipulation
     global $db;
     $db = iems5718_DB();
 
     // TODO: complete the rest of the INSERT command
-    if (!preg_match('/^[\w\- ]+$/', $_POST['name']))
-        throw new Exception("invalid-catid");
-    $_POST['name'] = (int) $_POST['name'];
-    if (!preg_match('/^[\d\.]+$/', $_POST['price']))
-        throw new Exception("invalid-price");
-
     $name = $_POST["name"];
     $price = $_POST["price"];
    
-    $sql= "UPDATE product SET price = '$price' WHERE name = '$name';";
-    $db -> query($sql);
-
+    $sql= "UPDATE product SET price = ? WHERE name = ?;";
+    $q = db -> prepare($sql);
+    $q -> execute(array($price,$name));	
     header('Location: admin.php');
     exit();
 }
 
 function iems5718_prod_delete(){
-     // input validation or sanitization
-
+    // input validation or sanitization
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+    	if (!preg_match('/^[\w\- ]+$/', $_POST['name']))throw new Exception("invalid-name");
+    }
     // DB manipulation
     global $db;
     $db = iems5718_DB();
 
     // TODO: complete the rest of the INSERT command
-    if (!preg_match('/^[\w\- ]+$/', $_POST['name']))throw new Exception("invalid-name");
     $nameProd = $_POST['name'];
 
-    $sql = "DELETE FROM category WHERE name = '$nameProd';";
-    $db -> query($sql);
-
+    $sql = "DELETE FROM category WHERE name = ?;";
+    $q = db -> prepare($sql);
+    $q -> execute(array($nameProd));
     header('Location: admin.php');
     exit();
 }
 
-
+?>
