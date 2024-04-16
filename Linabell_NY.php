@@ -14,13 +14,15 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
         <title>Main Page</title>
         <link href="css/Linabell_NY.css" rel="stylesheet" type="text/css">
     </head>
-    <body>
-	<?php
+        <body>
+        <?php
                 if(isset($_SESSION['userid']) && isset($_SESSION['email'])){
                         echo '<h5> Hello ' . $_SESSION['email'] .'!</h5>';
+                        echo '<br><a href=portal.php>profile</a></br>';
                         echo '<a href=logout.php>Logout</a>';
                 }else{
                         echo '<h5> Hello Guest!</h5>';
+                        echo '<br><a href=portal.php>profile</a></br>';
                         echo '<a href=login.php>Login</a>';
                 }
         ?>
@@ -52,6 +54,7 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
                             ?>
                         </ul>
                     </li>
+		    <li><a href="cart.php">Cart</a></li>
                     <li><a href="#">Contact Us</a></li>
                 </ul>
             </nav>
@@ -61,6 +64,7 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
                 <h3>Total: $<span id="total_amount">0</span></h3>
                 <div id="shopping_cart">
                         <ul id="items"></ul>
+			<a href='cart.php'>Go To Cart</a>
                 </div>
         </nav>
 	

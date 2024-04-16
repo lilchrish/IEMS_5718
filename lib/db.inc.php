@@ -93,7 +93,7 @@ function iems5718_prod_insert() {
         $price = $_POST["price"];
         $desc = $_POST["description"];
         $sql="INSERT INTO product (catid, name, price, description) VALUES (?,?,?,?);";
-	$q = db -> prepare($sql);
+	$q = $db -> prepare($sql);
 	$q -> execute(array($catid,$name,$price,$desc));
         $lastId = mysqli_insert_id($db);
         // Note: Take care of the permission of destination folder (hints: current user is apache)
@@ -192,7 +192,7 @@ function iems5718_prod_delete_by_catid(){
         // TODO: complete the rest of the INSERT command
         $catid = $_POST["catid"];
         $sql = "DELETE FROM product WHERE catid = ?;";
-        $q = db -> prepare($sql);
+        $q = $db -> prepare($sql);
 	$q -> execute(array($catid));
         header('Location: admin.php');
         exit();
@@ -230,7 +230,7 @@ function iems5718_prod_edit(){
     $price = $_POST["price"];
    
     $sql= "UPDATE product SET price = ? WHERE name = ?;";
-    $q = db -> prepare($sql);
+    $q = $db -> prepare($sql);
     $q -> execute(array($price,$name));	
     header('Location: admin.php');
     exit();
@@ -249,7 +249,7 @@ function iems5718_prod_delete(){
     $nameProd = $_POST['name'];
 
     $sql = "DELETE FROM category WHERE name = ?;";
-    $q = db -> prepare($sql);
+    $q = $db -> prepare($sql);
     $q -> execute(array($nameProd));
     header('Location: admin.php');
     exit();

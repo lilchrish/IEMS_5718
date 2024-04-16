@@ -36,7 +36,7 @@ async function add_newProduct(pid){
     } else {
         storage = JSON.parse(storage);
     }
-    const response = await fetch("http://3.113.178.224/products.php?pid[]="+pid);
+    const response = await fetch("https://3.113.178.224/products.php?pid[]="+pid);
     products = await response.json();
     products[pid].pid = pid;
     
@@ -64,10 +64,8 @@ async function refreshCart(){ //Compute the whole cart
     } else {
         storage = JSON.parse(storage);
     }
-    const response = await fetch("http://3.113.178.224/products.php?pid[]="+Object.keys(storage).join('&pid[]='));
+    const response = await fetch("https://3.113.178.224/products.php?pid[]="+Object.keys(storage).join('&pid[]='));
     products = await response.json();
-
-    console.log(products);
 
     document.getElementById("items").innerHTML = ''; // Remove all html code inside
 

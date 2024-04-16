@@ -1,41 +1,40 @@
 <?php
+ini_set('display_errors',1);
+error_reporting(E_ALL);
+header('Access-Control-Allow-Origin: *');
 session_start();
 require __DIR__.'/lib/db.inc.php';
 $res = iems5718_cat_fetchall();
 $catoptions = '';
 $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com', 'buythebest-admin','huangjiaqi8024', 'buythebest');
+// Again, it is NOT SECURE. Why? and how to make it "secure"?
 ?>
 
 <!doctype html>
-
 <html>
     <head>
         <meta charset="utf-8" />
         <title>Main Page</title>
-        <link href="css/Linabell_DG.css" rel="stylesheet" type="text/css">
+        <link href="css/main_page_style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
         <?php
                 if(isset($_SESSION['userid']) && isset($_SESSION['email'])){
                         echo '<h5> Hello ' . $_SESSION['email'] .'!</h5>';
-                        echo '<br><a href=portal.php>profile</a></br>';
-                        echo '<a href=logout.php>Logout</a>';
+			echo '<br><a href=portal.php>profile</a></br>';
+			echo '<a href=logout.php>Logout</a>';
                 }else{
-                        echo '<h5> Hello Guest!</h5>';
-                        echo '<br><a href=portal.php>profile</a></br>';
-                        echo '<a href=login.php>Login</a>';
+			header('location: login.php');
+			exit();
                 }
         ?>
-	<script src="shopping_cart.js"></script>
         <header class="header1"> Buy The Best </header>
-
+        <script src="shopping_cart.js"></script>
         <div id="menu">
-            <p class="home">
-                <a href="index.php">Home</a> > <a href="Category_DG.php">Dragon Year Edition</a>
-            </p>
+            <p class="home"> <a href="#">Home</a> </p>
             <nav>
                 <ul class="menu">
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="#">Home</a></li>
                     <li class= "category">
                         <a href="#">category</a>
                         <ul class= "submenuC">
@@ -54,32 +53,36 @@ $db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com',
                             ?>
                         </ul>
                     </li>
-		    <li><a href="cart.php">Cart</a></li>
+                    <li><a href="cart.php">Cart</a></li>
                     <li><a href="#">Contact Us</a></li>
                 </ul>
             </nav>
-        </div>
-        
-	<nav id='cart'>
-                <h3>Total: $<span id="total_amount">0</span></h3>
-                <div id="shopping_cart">
-                        <ul id="items"></ul>
-			<a href='cart.php'>Go To Cart</a>
-                </div>
-        </nav>
-	
-	<div class="product">
-            <?php
-                $id = iems5718_cat_fetchByName('DG');
-                $lb = iems5718_prod_fetchByNameID('Linabell',$id);
-                foreach ($lb as $lbb){
-                    echo '<img src="images/' . $lbb['pid'] . '.jpg" alt="Linabell Dragon Year Edition"/>';
-                    echo '<p id="description"> Description:' . $lbb['description'] . '</p>';
-                    echo '<p id="price"> $' . $lbb['price'] . ' </p>';
-                    echo '<button class="add" onclick="addtocart('. $lbb['pid'] - 1 .');"> add</button>';
-                }
-            ?>
-        </div>
+	</div>
+	<table align = "left" border = "1" cellpadding = "3" cellspacing = "0">
+	<tr>
+		<td>Order</td>
+		<td>userName</td>
+		<td>product_list</td>
+		<?php
+		$db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com', 'buythebest-admin','huangjiaqi8024', 'buythebest');
+		$email =  $_SESSION['email'];
+		$sql = "SELECT * FROM orders where userName = '$email' ORDER BY pid DESC LIMIT 5;";
+		$q = $db -> query($sql);
+		$i = 1;
+		foreach ($q as $val){
+			echo '<tr>';
+			echo '<td>' .$i. '</td>';
+                        echo '<td>' .$val['userName']. '</td>';
+                        echo '<td>' .$val['product_list']. '</td>';
+			echo '</tr>';
+			$i += 1;
+		}
+        	?>
+	</tr>
+	</table>
+
+
 
     </body>
 </html>
+

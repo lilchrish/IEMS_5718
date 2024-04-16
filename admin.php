@@ -16,8 +16,9 @@ if (!empty($_COOKIE['auth'])){
 	if($t = json_decode($_COOKIE['auth'],true)){
 		if (time() > $t['exp']) return $checkR;
 		global $db;
+		$db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com', 'buythebest-admin','huangjiaqi8024', 'buythebest'); 
 		$q = $db -> prepare('SELECT salt, password FROM users WHERE email = ?');
-		if($q -> execute(array($t['em'])) && ($r = $q -> get_result() -> fetch_assoc()) && $t['k'] == hash_hmac("sha256", $t['exp'].$r['password'],$r['salt'])){
+		if($q -> execute(array($t['email'])) && ($r = $q -> get_result() -> fetch_assoc()) && $t['k'] == hash_hmac("sha256", $t['exp'].$r['password'],$r['salt'])){
 			$_SESSION['auth'] = $_COOKIE['auth'];
 			$auth_email = $t['email'];
 			$checkR = true;
@@ -30,8 +31,6 @@ if(!$checkR){
 
 $res = iems5718_cat_fetchall();
 $options = '';
-// Again, it is NOT SECURE. Why? and how to make it "secure"?
-
 
 
 foreach ($res as $value){
@@ -48,6 +47,34 @@ foreach ($res as $value){
                         echo '<a href=login.php>Login</a>';
                 }
 ?>
+<br>
+<html>
+<h3> The most recent 10 orders</h3>
+<table align = "left" border = "1" cellpadding = "3" cellspacing = "0">  
+<tr>  
+<td>pid</td>  
+<td>userName</td> 
+<td>payment_status</td>
+<td>product_list</td>  
+<td>digest</td>
+</tr>
+	<?php
+		$db = mysqli_connect('buythebest.cvc6844gen9o.ap-northeast-1.rds.amazonaws.com', 'buythebest-admin','huangjiaqi8024', 'buythebest');
+                $q = $db -> query('SELECT * FROM orders ORDER BY pid DESC LIMIT 10');
+		
+		foreach ($q as $val){
+			echo '<tr>';
+			echo '<td>' .$val['pid']. '</td>'; 
+		       	echo '<td>' .$val['userName']. '</td>';
+  			echo '<td>' .$val['payment_status']. '</td>';  
+			echo '<td>' .$val['product_list']. '</td>';
+			echo '<td>' .$val['digest']. '</td>'; 
+    			echo '</tr>';  
+		}
+	?>
+</table>
+</html>
+</br>
 <html>
     <fieldset>
         <legend> New Product</legend>
